@@ -4,6 +4,7 @@
     https://api.github.com/users/<your name>
 */
 
+  
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +29,82 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
+axios.get(`https://api.github.com/users/meloegel`)
+  .then(response => {
+    console.log(response.data)
+    let card = document.querySelector('.cards')
+    card.appendChild(gitHubInfo(response.data))
+  })
+  .catch(error => {
+    console.log(error)
+  })
+
+
+const followersArray = ['tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'];
+
+
+
+
+function gitHubInfo(gitHubUserName){
+  const {avatar_url, name, login, location, url, followers, following, bio}  = gitHubUserName
+  const card = document.createElement('div')
+  const img = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const givenName = document.createElement('h3')
+  const userName = document.createElement('p')
+  const local = document.createElement('p')
+  const profile = document.createElement('p')
+  const userAddress = document.createElement('a')
+  const follows = document.createElement('p')
+  const follow = document.createElement('p')
+  const bios = document.createElement('p')
+  card.appendChild(img)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(givenName)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(local)
+  cardInfo.appendChild(profile)
+  profile.appendChild(userAddress)
+  cardInfo.appendChild(follows)
+  cardInfo.appendChild(follow)
+  cardInfo.appendChild(bios)
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  givenName.classList.add('name')
+  userName.classList.add('username')
+  givenName.textContent = `${name}`
+  userName.textContent = `${login}`
+  local.textContent = `${location}`
+  userAddress.textContent = `${url}`
+  follows.textContent = `${followers}`
+  follow.textContent = `${following}`
+  bios.textContent = `${bio}`
+  img.src = avatar_url
+  return card
+}
+
+
+followersArray.forEach(user => {
+  axios
+    .get(`https://api.github.com/users/${user}`)
+    .then(res => {
+      console.log(res.data)
+      let card = document.querySelector('.cards')
+      card.appendChild(gitHubInfo(res.data))
+    })
+    .catch(err => err)
+})
+
+
+
+
+// console.log(gitHubInfo())
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -52,9 +128,5 @@ const followersArray = [];
 
 /*
   List of LS Instructors Github username's:
-    tetondan
-    dustinmyers
-    justsml
-    luishrd
-    bigknell
+    
 */
